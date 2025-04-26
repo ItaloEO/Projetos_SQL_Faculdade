@@ -1,0 +1,97 @@
+CREATE DATABASE bd_Aula_nicolas;
+USE bd_Aula_nicolas;
+
+CREATE TABLE vendas(
+ID_VENDAS BIGINT NOT NULL PRIMARY KEY,
+NOME_CLIENTE VARCHAR (150) NOT NULL,
+PEDIDO_ITEM VARCHAR (90), 
+QTDE BIGINT,
+VALOR_PRODUTO FLOAT 
+);
+
+
+ALTER TABLE vendas MODIFY VALOR_PRODUTO FLOAT (10,3);
+DELETE FROM vendas;
+
+-- Populando db_vendas --
+
+INSERT INTO vendas (ID_VENDAS, NOME_CLIENTE, PEDIDO_ITEM, QTDE, VALOR_PRODUTO)
+VALUES 
+(1, 'Alice Oliveira', 'Tênis', 2, 160.50),
+(2, 'Angela Carla', 'Calça', 3, 189.20),
+(3, 'Vinicius Ribeiro', 'Meia', 3, 29.50),
+(4, 'Ricardo Ferreira', 'Notebook', 1, 1989.20),
+(5, 'Fabricio Carreiro', 'Celular', 1, 1650.20);
+
+UPDATE vendas SET PEDIDO_ITEM = 'Panela' WHERE ID_VENDAS = 2
+
+DELETE FROM vendas WHERE ID_VENDAS = 4;
+
+-- Atividade 2 - Banco de Dados
+-- Ementa: Controle de Dados e Segunraça em MySQL
+
+CREATE DATABASE db_escola;
+USE db_escola;
+
+
+CREATE TABLE CURSOS (
+  ID_CURSO INT NOT NULL PRIMARY KEY,
+  NOME_CURSO VARCHAR(100),
+  DURAÇÃO_MESES INT
+);
+
+
+CREATE TABLE ALUNOS (
+  ID_ALUNO INT PRIMARY KEY,
+  NOME_ALUNO VARCHAR(100),
+  IDADE INT,
+  ID_CURSO INT,
+  FOREIGN KEY (ID_CURSO) REFERENCES CURSOS(ID_CURSO)
+);
+
+-- Populando db_escola --
+INSERT INTO ALUNOS (ID_ALUNO, NOME_ALUNO, IDADE, ID_CURSO)
+VALUES 
+(1, 'João Silva', 20, 1),
+(2, 'Maria Santos', 22, 2),
+(3, 'Carlos Oliveira', 25, 1),
+(4, 'Ana Pereira', 23, 3),
+(5, 'Pedro Costa', 21, 2);
+
+
+INSERT INTO CURSOS(ID_CURSO, NOME_CURSO, DURAÇÃO_MESES)
+VALUES 
+(1, 'Engenharia de Software', 48),
+(2, 'Administração', 36),
+(3, 'Arquitetura', 60),
+(4, 'Marketing', 24),
+(5, 'Direito', 48);
+
+
+-- Criando usuarios no Database --
+
+CREATE USER 'analista_bi'@'localhost' IDENTIFIED BY 'User_Italo'; 
+CREATE USER 'sistema'@'localhost' IDENTIFIED BY 'User_Vinicius'; 
+
+
+-- Libere os acesso para realizar somente o SELECT nas tabelas cursos e alunos
+-- libere os acessos para que o usuario sistema realizei SELECT, UPDATE, DELETE
+GRANT SELECT ON db_escola.* TO 'analista_bi'@'localhost';
+GRANT SELECT, UPDATE,  DELETE ON db_escola.* TO 'sistema'@'localhost';
+
+
+-- Crie um usuario novo chamadao sistema_SELECT para realizar SELECT
+CREATE USER 'sistema_SELECT'@'localhost' IDENTIFIED BY 'user8888'; 
+GRANT SELECT ON db_escola.* TO 'sistema_SELECT'@'localhost';
+
+-- Realize a remoção da permissão SELECT do usuário sistema2
+REVOKE SELECT ON db_escola.* FROM 'sistema'@'localhost';
+
+
+-- ao não conseguir fazer o revoke no user sistemas, vou remover todos as permissões e atribuir isoladamente --
+
+GRANT UPDATE, DELETE ON db_escola.* TO 'sistema'@'localhost';
+
+SHOW GRANTS FOR 'sistema'@'localhost';
+
+
